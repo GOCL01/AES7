@@ -1,4 +1,3 @@
-#include "platform.h"
 #include "xbasic_types.h"
 #include "xparameters.h"
 #include "sleep.h"
@@ -8,7 +7,7 @@ Xuint32 *baseaddr_p_op =0x41200000;
 Xuint32 *baseaddr_p_res =0x41210000;
 int main()
 {
-init_platform();
+
 
 xil_printf("AXI4 Adder IP Demo\n\r");
 
