@@ -28,24 +28,24 @@ begin
     -- Test process
     stim_proc: process
     begin
-        -- Test Case 1: A = 5, B = 3
-        A <= "01010101"; -- 5 in binary
-        B <= "00110000"; -- 3 in binary
+        
+        A <= "01010101"; 
+        B <= "00110000"; 
         wait for 10 ns;
 
-        -- Test Case 2: A = 2, B = 7
-        A <= "00101111"; -- 2 in binary
-        B <= "01110101"; -- 7 in binary
+       
+        A <= "00101111"; 
+        B <= "01110101";
         wait for 10 ns;
 
-        -- Test Case 3: A = 4, B = 4
-        A <= "11111111"; -- 4 in binary
-        B <= "11111111"; -- 4 in binary
+        
+        A <= "11111111"; 
+        B <= "11111111"; 
         wait for 10 ns;
         
         -- Test Case 3: A = 4, B = 4
-        A <= "00000000"; -- 4 in binary
-        B <= "00000000"; -- 4 in binary
+        A <= "00000000"; 
+        B <= "00000000"; 
         wait for 10 ns;
 
 
