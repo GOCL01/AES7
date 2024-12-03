@@ -33,7 +33,8 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity tb_top_level is
-generic(MAX_BIT: integer:=16);
+-- enable the below generic if you want to parametrized your design from the top_level
+-- generic(MAX_BIT: integer:=16);
 --  Port ( );
 end tb_top_level;
 
@@ -45,7 +46,7 @@ signal tb_RST : STD_LOGIC;
 signal tb_PWM_OUT : STD_LOGIC;
 signal tb_PWM_DIR : STD_LOGIC;
 signal tb_PWM_ERR : STD_LOGIC;
-signal tb_SEL : STD_LOGIC_VECTOR (3 downto 0); 
+signal tb_SEL : STD_LOGIC_VECTOR (2 downto 0); 
 --signal tb_POWER_int : integer range 0 to 20000;
 
 begin
@@ -62,21 +63,23 @@ process begin
 
     --  TODO : Change period to the appropiate one required in your assignment 
 
-    tb_SEL <= "0000";
+    tb_SEL <= "000";
     wait for 400us; --(20ns * 20000 cycles)
-        tb_SEL <= "0001";
+        tb_SEL <= "001";
     wait for 400us; --(20ns * 20000 cycles)
-        tb_SEL <= "0100";
+        tb_SEL <= "010";
     wait for 400us; --(20ns * 20000 cycles)
         tb_SEL <= "1000";
     wait for 400us; --(20ns * 20000 cycles)
+
+    -- TODO : add all combinations
   
 
 
 wait;
 end process;
 
-
+-- TODO: Change to your ports names
 UUT: entity work.top_level_PWM 
 Port map ( SEL => tb_SEL, 
            CLK => tb_CLK,
