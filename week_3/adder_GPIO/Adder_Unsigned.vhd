@@ -14,7 +14,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity Adder_Unsigned is
-generic (length_in  : integer := 31;   -- input length
+generic (length_in  : integer := 32;   -- input length
          length_out : integer := 32 ); -- output length
 port (
 FirstValue  : in std_logic_vector( length_in - 1  downto 0); 
