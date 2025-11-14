@@ -1,91 +1,103 @@
 -------------------------------------------------------------------------
--- TESTBENCH => What should be tested
---              How to perform the test
---              What validates a good test outcome
--- Component: VHDL test bench for <yourdesign>
--- Remarks  : 
+-- Institution : Applied Science University Fontys
+-- Subject : AES7
+-- Department : Mechatronics
+-- Author: Lizeth Gonzalez Carabarin
 -------------------------------------------------------------------------
-
 library IEEE;
-use IEEE.Std_logic_1164.all;
-use IEEE.Numeric_STD.all;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
-entity PWMGEN_TB is
-end entity PWMGEN_TB;
+entity tb_PWM is
+-- Testbenches have no ports
+end tb_PWM;
 
-architecture BENCH of PWMGEN_TB is
--------------------------------------------
--- Signals and constants
--------------------------------------------
+architecture Behavioral of tb_PWM is
 
-signal CLK       : STD_LOGIC := '0';   
-signal RST       : STD_LOGIC := '0';   
-signal power     : STD_LOGIC_VECTOR (15 downto 0);
-signal PWMout    : STD_LOGIC;
-signal PWMerror  : STD_LOGIC;
-signal PWMdir    : STD_LOGIC; 
+    -- Component declaration
+    component PWM
+        Port (  
+            CLK      : in  STD_LOGIC;   
+            RST      : in  STD_LOGIC;   
+            power    : in  STD_LOGIC_VECTOR (31 downto 0); --Fix your corresponding bit length
+            PWMout   : out STD_LOGIC;
+            PWMdir   : out STD_LOGIC;
+            PWMerror : out STD_LOGIC
+        );           
+    end component;
+
+    -- Signals to connect to DUT
+    signal CLK_tb      : std_logic := '0';
+    signal RST_tb      : std_logic := '1';
+    signal power_tb    : std_logic_vector(31 downto 0) := (others => '0');
+    signal PWMout_tb   : std_logic;
+    signal PWMdir_tb   : std_logic;
+    signal PWMerror_tb : std_logic;
+
+    -- Clock period
+    constant CLK_PERIOD : time := 8 ns;  -- 125 MHz clock
 
 begin
--------------------------------------------
--- clock generator
--------------------------------------------  
-CLK <= not CLK after 10 NS;
 
--------------------------------------------
--- reset generator
--------------------------------------------
+    -- Instantiate DUT
+    DUT: PWM
+        port map(
+            CLK      => CLK_tb,
+            RST      => RST_tb,
+            power    => power_tb,
+            PWMout   => PWMout_tb,
+            PWMdir   => PWMdir_tb,
+            PWMerror => PWMerror_tb
+        );
 
-POWER_process : process
-variable length : integer := 16;
-begin
+    -- Clock generation
+    CLK_process :process
+    begin
+        while true loop
+            CLK_tb <= '0';
+            wait for CLK_PERIOD/2;
+            CLK_tb <= '1';
+            wait for CLK_PERIOD/2;
+        end loop;
+    end process;
 
-RST <= '1';
-wait for 0.1ms;
-RST<='0';
-wait for 0.1ms;
--- This values must be change according to your design 
-POWER <= std_logic_vector(to_signed(-21000, POWER'length));
-wait for 2ms;
+    -- Stimulus process
+    stim_proc: process
+    begin
+        -- Apply reset
+        RST_tb <= '1';
+        wait for 50 ns;
+        RST_tb <= '0';
+        wait for 50 ns;
 
-POWER <= std_logic_vector(to_signed(-20000, POWER'length));
-wait for 2ms;
+        -- Test 1: Zero power
+        power_tb <= std_logic_vector(to_signed(0, 32));
+        wait for 800 us;
 
-POWER <= std_logic_vector(to_signed(-10000, POWER'length));
-wait for 2ms;
+        -- Test 2: Positive power in range
+        power_tb <= std_logic_vector(to_signed(10000, 32));
+        wait for 800 us;
 
-POWER <= std_logic_vector(to_signed(-5000, POWER'length));
-wait for 2ms;
+        -- Test 3: Maximum positive power (you need to input POWER value)
+        power_tb <= std_logic_vector(to_signed(----, 32));
+        wait for 800 us;
 
-POWER <= std_logic_vector(to_signed(0, POWER'length));
-wait for 2ms;
+        -- Test 4: Out-of-range positive power (should trigger PWMerror)
+        power_tb <= std_logic_vector(to_signed(----, 32));
+        wait for 800 us;
 
-POWER <= std_logic_vector(to_signed(5000, POWER'length));
-wait for 2ms;
+        -- Test 5: Negative power in range (you need to input POWER value)
+        power_tb <= std_logic_vector(to_signed(-----, 32));
+        wait for 800 us;
 
-POWER <= std_logic_vector(to_signed(10000, POWER'length));
-wait for 2ms;
+        -- Test 6: Out-of-range negative power (should trigger PWMerror)
+        power_tb <= std_logic_vector(to_signed(-----, 32));
+        wait for 800 us;
 
-POWER <= std_logic_vector(to_signed(20000, POWER'length));
-wait for 2ms;
+        -- Test 7 : Feel free to add more vector tests
 
-POWER <= std_logic_vector(to_signed(21000, POWER'length));
-wait for 2ms;
+        -- Stop simulation
+        wait;
+    end process;
 
-wait;
-
-end process POWER_process;
-
--------------------------------------------
--- Instantiate the UUT component
--------------------------------------------
-UUT: entity work.PWMgen
-  port map (
-    CLK        => CLK,
-    RST        => RST,
-    power      => power,
-    PWMout     => PWMout,
-    PWMdir     => PWMdir,
-    PWMerror   => PWMerror
-  );
-
-end architecture BENCH;
+end Behavioral;
