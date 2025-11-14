@@ -19,14 +19,14 @@ architecture Behavioral of tb_top_PWM is
     ----------------------------------------------------------------------
     -- Generic values to match top_PWM
     ----------------------------------------------------------------------
-    constant POWER_WIDTH1 : integer := 16;
-    constant MAX_POWER1   : integer := 50000;
+    constant POWER_WIDTH1 : integer := --;
+    constant MAX_POWER1   : integer := --;
 
-    constant POWER_WIDTH2 : integer := 15;
-    constant MAX_POWER2   : integer := 25000;
+    constant POWER_WIDTH2 : integer := --;
+    constant MAX_POWER2   : integer := --;
 
-    constant POWER_WIDTH3 : integer := 14;
-    constant MAX_POWER3   : integer := 12500;
+    constant POWER_WIDTH3 : integer := --;
+    constant MAX_POWER3   : integer := ---;
 
     ----------------------------------------------------------------------
     -- DUT signal declarations
